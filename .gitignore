@@ -3,3 +3,4 @@ dist/
 text2digits.egg-info/
 text2digits_careless25.egg-info/
 *.pyc
+.idea

@@ -1,5 +1,3 @@
-from typing import List
-
 from text2digits.tokens_basic import Token, WordType
 from text2digits.rules import CombinationRule, ConcatenationRule
 from text2digits.text_processing_helpers import split_glues, find_similar_word
@@ -12,8 +10,8 @@ class Text2Digits(object):
 
         Basic usage:
 
-        >>> from text2digits import text2digits
-        >>> t2d = text2digits.Text2Digits()
+        >>> from text2digits.t2d import Text2Digits
+        >>> t2d = Text2Digits()
         >>> t2d.convert("twenty ten and twenty one")
         >>> 2010 and 21
 
@@ -33,7 +31,7 @@ class Text2Digits(object):
         if self.add_ordinal_ending:
             self.convert_ordinals = True
 
-    def convert(self, text: str) -> str:
+    def convert(self, text):
         """
         Converts all number representations to digits.
 
@@ -52,7 +50,7 @@ class Text2Digits(object):
 
         return text
 
-    def _lex(self, text: str) -> List[Token]:
+    def _lex(self, text):
         """
         This function takes an arbitrary input string, splits it into tokens (words) and assigns each token a type corresponding to the role in the sentence.
 
@@ -83,7 +81,7 @@ class Text2Digits(object):
 
         return tokens
 
-    def _parse(self, tokens: List[Token]) -> str:
+    def _parse(self, tokens):
         """
         Parses the tokenized input based on predefined rules which combine certain tokens to find the correct digit representation of the textual number description.
 

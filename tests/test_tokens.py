@@ -1,4 +1,4 @@
-from text2digits import text2digits
+from text2digits.t2d import Text2Digits
 from text2digits.tokens_basic import WordType, Token
 
 
@@ -8,7 +8,7 @@ def test_lexer():
              WordType.TENS, WordType.TENS, WordType.CONJUNCTION, WordType.UNITS, WordType.OTHER, WordType.OTHER,
              WordType.UNITS, WordType.OTHER]
 
-    t2d = text2digits.Text2Digits()
+    t2d = Text2Digits()
     tokens = t2d._lex(example)
     for token, type in zip(tokens, types):
         assert token.type == type, token.text()

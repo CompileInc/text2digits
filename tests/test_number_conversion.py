@@ -1,6 +1,6 @@
 import pytest
 
-from text2digits import text2digits
+from text2digits.t2d import Text2Digits
 
 
 @pytest.mark.parametrize("input_text", [
@@ -8,7 +8,7 @@ from text2digits import text2digits
     "Hello world. How are you?",
 ])
 def test_str_unchanged_if_no_numbers(input_text):
-    t2d_default = text2digits.Text2Digits()
+    t2d_default = Text2Digits()
     result = t2d_default.convert(input_text)
     assert result == input_text  # unchanged
 
@@ -31,7 +31,7 @@ def test_str_unchanged_if_no_numbers(input_text):
     ("forty_two", "42"),
 ])
 def test_positive_integers(input_text, expected):
-    t2d_default = text2digits.Text2Digits()
+    t2d_default = Text2Digits()
     result = t2d_default.convert(input_text)
     assert result == expected
 
@@ -49,7 +49,7 @@ def test_positive_integers(input_text, expected):
     ("sixty six ten", "6610"),
 ])
 def test_years(input_text, expected):
-    t2d_default = text2digits.Text2Digits()
+    t2d_default = Text2Digits()
     result = t2d_default.convert(input_text)
     assert result == expected
 
@@ -61,7 +61,7 @@ def test_years(input_text, expected):
     ("twenty eleven zero three", "201103"),
 ])
 def test_multiple_types_of_numbers(input_text, expected):
-    t2d_default = text2digits.Text2Digits()
+    t2d_default = Text2Digits()
     result = t2d_default.convert(input_text)
     assert result == expected
 
@@ -86,7 +86,7 @@ def test_multiple_types_of_numbers(input_text, expected):
     ("hundred and two", "102"),
 ])
 def test_others(input_text, expected):
-    t2d_default = text2digits.Text2Digits()
+    t2d_default = Text2Digits()
     result = t2d_default.convert(input_text)
     assert result == expected
 
@@ -99,7 +99,7 @@ def test_others(input_text, expected):
     ("ninteen nineti niine", "1999"),
 ])
 def test_spelling_correction(input_text, expected):
-    t2d_default = text2digits.Text2Digits(similarity_threshold=0.7)
+    t2d_default = Text2Digits(similarity_threshold=0.7)
     result = t2d_default.convert(input_text)
     assert result == expected
 
@@ -116,7 +116,7 @@ def test_spelling_correction(input_text, expected):
     ("100 and two", "102"),
 ])
 def test_number_literals(input_text, expected):
-    t2d_default = text2digits.Text2Digits()
+    t2d_default = Text2Digits()
     result = t2d_default.convert(input_text)
     assert result == expected
 
@@ -174,7 +174,7 @@ def test_number_literals(input_text, expected):
 ])
 def test_ordinal_conversion_switch_disabled(ordinal_input, convert_ordinals, add_ordinal_ending, expected):
     input_str = "she was the {} to finish the race"
-    t2d_default = text2digits.Text2Digits(convert_ordinals=convert_ordinals, add_ordinal_ending=add_ordinal_ending)
+    t2d_default = Text2Digits(convert_ordinals=convert_ordinals, add_ordinal_ending=add_ordinal_ending)
     result = t2d_default.convert(input_str.format(ordinal_input))
     assert result == input_str.format(expected)
 
@@ -189,7 +189,7 @@ def test_ordinal_conversion_switch_disabled(ordinal_input, convert_ordinals, add
 ])
 def test_ordinal_at_the_end_of_the_sentence(ordinal_input, convert_ordinals, add_ordinal_ending, expected):
     input_str = "she finished {}"
-    t2d_default = text2digits.Text2Digits(convert_ordinals=convert_ordinals, add_ordinal_ending=add_ordinal_ending)
+    t2d_default = Text2Digits(convert_ordinals=convert_ordinals, add_ordinal_ending=add_ordinal_ending)
     result = t2d_default.convert(input_str.format(ordinal_input))
     assert result == input_str.format(expected)
 
@@ -198,7 +198,7 @@ def test_ordinal_multi_occurrence_and_cardinal():
     # using two ordinal numbers with different endings ("th" and "nd")
     # and a cardinal number in the middle
     input_str = "she finished sixty-fourth on race number six and he finished forty-second"
-    t2d_default = text2digits.Text2Digits(convert_ordinals=True, add_ordinal_ending=True)
+    t2d_default = Text2Digits(convert_ordinals=True, add_ordinal_ending=True)
     result = t2d_default.convert(input_str)
     assert result == "she finished 64th on race number 6 and he finished 42nd"
 
@@ -213,6 +213,6 @@ def test_ordinal_multi_occurrence_and_cardinal():
     ('at 03:03 I will turn 15', 'at 03:03 I will turn 15'),
 ])
 def test_time_formats(input_text, expected_output):
-    t2d_default = text2digits.Text2Digits()
+    t2d_default = Text2Digits()
     result = t2d_default.convert(input_text)
     assert result == expected_output

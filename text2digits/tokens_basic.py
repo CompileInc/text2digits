@@ -39,7 +39,7 @@ class Token(object):
     for idx, word in enumerate(SCALES):
         numwords[word] = (10 ** (idx * 3 or 2), 0)
 
-    def __init__(self, word: str, glue: str):
+    def __init__(self, word, glue):
         """
         Represents a word in the text with some additional knowledge about the word (e.g. information about its type).
 
@@ -83,13 +83,13 @@ class Token(object):
         else:
             self.type = WordType.OTHER
 
-    def __repr__(self) -> str:
-        return f'{self._word} ({self.type})'
+    def __repr__(self):
+        return u'{} ({})'.format(self._word, self.type)
 
-    def is_ordinal(self) -> bool:
+    def is_ordinal(self):
         return self.ordinal_ending is not None
 
-    def has_large_scale(self) -> bool:
+    def has_large_scale(self):
         """
         Returns True when the token has a scale >= 100.
         """
@@ -100,7 +100,7 @@ class Token(object):
         else:
             return False
 
-    def value(self) -> Decimal:
+    def value(self):
         """
         Returns the value of a token (e.g. twelve -> 12). SCALES have a value of 0 since they are defined by their scale and not by their value, e.g. for two hundred we calculate 2 * 100 + 0.
         """
@@ -112,7 +112,7 @@ class Token(object):
         elif self.type != WordType.OTHER:
             return Decimal(Token.numwords[self._word][1])
 
-    def scale(self) -> Decimal:
+    def scale(self):
         """
         Returns the scale of a token (e.g. hundred -> 100).
         """
@@ -124,7 +124,7 @@ class Token(object):
         elif self.type != WordType.OTHER:
             return Decimal(Token.numwords[self._word][0])
 
-    def text(self) -> str:
+    def text(self):
         """
         Returns the textual (digit) representation of the token (e.g. twelve -> 12).
         """
@@ -145,8 +145,8 @@ class NoneToken(object):
     def __init__(self):
         self.type = None
 
-    def is_ordinal(self) -> bool:
+    def is_ordinal(self):
         return False
 
-    def has_large_scale(self) -> bool:
+    def has_large_scale(self):
         return False

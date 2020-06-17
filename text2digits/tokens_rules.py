@@ -1,18 +1,17 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from decimal import Decimal
-from typing import List
 
 from text2digits.tokens_basic import WordType, Token
 
 
-class RuleToken(ABC):
-    def __init__(self, original_tokens: List[Token]):
+class RuleToken(object):
+    def __init__(self, original_tokens):
         """
         Base class for tokens which are used during rule processing.
 
         :param original_tokens: List of tokens which are combined by the rule.
         """
-        super().__init__()
+        super(RuleToken, self).__init__()
         self.original_tokens = original_tokens
 
         # The last token determines the ordinal ending, e.g. thirty-second --> nd
@@ -26,11 +25,11 @@ class RuleToken(ABC):
                 # The rule token is responsible for keeping the glue between the individual tokens (e.g. the hyphens in "two-hundred-thousandth") but not the glue of the last token
                 self.word_raw += token.glue
 
-    def is_ordinal(self) -> bool:
+    def is_ordinal(self):
         return any([token.is_ordinal() for token in self.original_tokens])
 
     @abstractmethod
-    def text(self) -> str:
+    def text(self):
         pass
 
 
@@ -39,22 +38,22 @@ class CombinedToken(RuleToken):
     Special token type which is used by the CombinationRule.
     """
 
-    def __init__(self, original_tokens: List[Token], value: Decimal, glue: str):
-        super().__init__(original_tokens)
+    def __init__(self, original_tokens, value, glue):
+        super(CombinedToken, self).__init__(original_tokens)
         self._value = value
         self.glue = glue
         self.type = WordType.REPLACED
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return str(self._value)
 
-    def value(self) -> Decimal:
+    def value(self):
         return self._value
 
-    def scale(self) -> Decimal:
+    def scale(self):
         return Decimal(1)
 
-    def text(self) -> str:
+    def text(self):
         number = self.value()
 
         # Remove tailing zeros, e.g. 1.2345 hundred -> 123.4500 -> 123.45
@@ -68,14 +67,14 @@ class ConcatenatedToken(RuleToken):
     Special token type which is used by the ConcatenationRule.
     """
 
-    def __init__(self, original_tokens: List[Token], text: str, glue: str):
-        super().__init__(original_tokens)
+    def __init__(self, original_tokens, text, glue):
+        super(ConcatenatedToken, self).__init__(original_tokens)
         self._text = text
         self.glue = glue
         self.type = WordType.REPLACED
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return str(self._text)
 
-    def text(self) -> str:
+    def text(self):
         return self._text

@@ -1,19 +1,18 @@
 import enum
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from decimal import Decimal
-from typing import List, Union
 
 from text2digits.tokens_basic import WordType, Token, NoneToken
 from text2digits.tokens_rules import CombinedToken, ConcatenatedToken, RuleToken
 
 
-class Rule(ABC):
+class Rule(object):
     """
     Rules are used to parse a sequence of tokens and to apply a rule on the detected tokens to retrieve a new number representation.
     """
 
     @abstractmethod
-    def match(self, tokens: List[Union[Token, RuleToken]]) -> int:
+    def match(self, tokens):
         """
         Analyses the tokens and tries to find a consecutive sequence of tokens which should be combined for the specified rule. The focus of this function lies on *which* tokens should be combined (instead of *how*).
 
@@ -23,7 +22,7 @@ class Rule(ABC):
         pass
 
     @abstractmethod
-    def action(self, tokens: List[Union[Token, RuleToken]]) -> RuleToken:
+    def action(self, tokens):
         """
         Combines the tokens and replaces it with a new token (e.g. converted number). The focus of this function lies on *how* tokens should be combined (instead of *which*).
 
@@ -41,7 +40,7 @@ class CombinationRule(Rule):
     def __init__(self):
         self.valid_types = [WordType.LITERAL_INT, WordType.LITERAL_FLOAT, WordType.UNITS, WordType.TEENS, WordType.TENS, WordType.SCALES]
 
-    def match(self, tokens: List[Token]) -> int:
+    def match(self, tokens):
         class MatchType(enum.Enum):
             SINGLE = 0
             SCALE = 1
@@ -112,7 +111,7 @@ class CombinationRule(Rule):
 
         return consumed_tokens
 
-    def action(self, tokens: List[Token]) -> CombinedToken:
+    def action(self, tokens):
         assert len(tokens) >= 2, 'At least two tokens are required'
 
         current = Decimal(0)
@@ -149,7 +148,7 @@ class ConcatenationRule(Rule):
     def __init__(self):
         self.valid_types = [WordType.UNITS, WordType.TEENS, WordType.TENS, WordType.SCALES, WordType.REPLACED]
 
-    def match(self, tokens: List[Union[Token, CombinedToken]]) -> int:
+    def match(self, tokens):
         i = 0
 
         # Find all numeric tokens
@@ -161,7 +160,7 @@ class ConcatenationRule(Rule):
 
         return i
 
-    def action(self, tokens: List[Union[Token, CombinedToken]]) -> ConcatenatedToken:
+    def action(self, tokens):
         assert len(tokens) >= 1, 'At least one token is required'
 
         last_glue = ''

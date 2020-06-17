@@ -1,8 +1,7 @@
 import re
-from typing import Iterator, List
 
 
-def bigram_similarity(word1: str, word2: str) -> float:
+def bigram_similarity(word1, word2):
     """
     Returns a number within the range [0, 1] determining how similar
     item1 is to item2. 0 indicates perfect dissimilarity while 1
@@ -31,7 +30,7 @@ def bigram_similarity(word1: str, word2: str) -> float:
     return float(len(similar)) / float(max(len(pairs1), len(pairs2)))
 
 
-def find_similar_word(word: str, collection: List, threshold: float) -> str:
+def find_similar_word(word, collection, threshold):
     """
     Returns the most syntactically similar word in the collection
     to the specified word.
@@ -51,7 +50,7 @@ def find_similar_word(word: str, collection: List, threshold: float) -> str:
     return match
 
 
-def split_glues(text: str, separator=r'\s+|(?<=\D)[.,;:\-_](?=\D)') -> Iterator[str]:
+def split_glues(text, separator=r'\s+|(?<=\D)[.,;:\-_](?=\D)'):
     """
     Splits a string and preserves the glue, i.e. the separator fragments.
     This is useful when words of a sentence should be processed while still
